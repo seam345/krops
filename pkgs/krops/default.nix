@@ -5,7 +5,7 @@ in
 { nix, openssh, populate, writers }: rec {
 
   rebuild = args: target:
-    runShell target {} "nixos-rebuild -I ${lib.escapeShellArg target.path} ${
+    runShell { inherit allocateTTY; }  target {} "nixos-rebuild -I ${lib.escapeShellArg target.path} ${
       lib.concatMapStringsSep " " lib.escapeShellArg args
     }";
 
@@ -47,6 +47,7 @@ in
     backup ? false,
     buildTarget ? null,
     crossDeploy ? false,
+    allocateTTY ? false,
     fast ? null,
     force ? false,
     source,
@@ -64,7 +65,7 @@ in
         ${lib.optionalString (buildTarget' != target')
           (populate { inherit backup force source; target = buildTarget'; })}
         ${populate { inherit backup force source; target = target'; }}
-        ${rebuild ([
+        ${rebuild { inherit allocateTTY; } ([
           "switch"
         ] ++ lib.optionals crossDeploy [
           "--no-build-nix"
