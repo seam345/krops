@@ -5,7 +5,7 @@ in
 { nix, openssh, populate, writers }: rec {
 
   rebuild = args: target:
-    runShell target {}  "nixos-rebuild -I ${lib.escapeShellArg target.path} ${
+    runShell target {}  "sudo nixos-rebuild -I ${lib.escapeShellArg target.path} ${
       lib.concatMapStringsSep " " lib.escapeShellArg args
     }";
 
