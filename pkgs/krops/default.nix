@@ -21,7 +21,7 @@ in
         writers.writeDash "krops.${target.host}.${lib.firstWord command}" ''
           exec ${openssh}/bin/ssh ${lib.escapeShellArgs (lib.flatten [
             (lib.mkUserPortSSHOpts target)
-            (if allocateTTY then "-t" else "-T")
+            "-t"
             target.extraOptions
             target.host
             command'])}
