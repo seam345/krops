@@ -4,13 +4,13 @@ in
 
 { nix, openssh, populate, writers }: rec {
 
-  rebuild = args: target: { allocateTTY ? false }:
-    runShell target {} { inherit allocateTTY; } "nixos-rebuild -I ${lib.escapeShellArg target.path} ${
+  rebuild = args: target:
+    runShell target {}  "nixos-rebuild -I ${lib.escapeShellArg target.path} ${
       lib.concatMapStringsSep " " lib.escapeShellArg args
     }";
 
   runShell = target: {
-    allocateTTY ? false
+    allocateTTY ? true
   }: command:
     let
       command' = if target.sudo then "sudo ${command}" else command;
@@ -47,7 +47,6 @@ in
     backup ? false,
     buildTarget ? null,
     crossDeploy ? false,
-    allocateTTY ? false,
     fast ? null,
     force ? false,
     source,
@@ -74,7 +73,7 @@ in
           "--target-host" "${target'.user}@${target'.host}"
         ] ++ lib.optionals target'.sudo [
           "--use-remote-sudo"
-        ]) buildTarget' { inherit allocateTTY; }}
+        ]) buildTarget' }
       ''
     );
 
