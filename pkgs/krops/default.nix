@@ -5,7 +5,7 @@ in
 { nix, openssh, populate, writers }: rec {
 
   rebuild = args: target: { allocateTTY ? false }:
-    runShell target { inherit allocateTTY; } {} "nixos-rebuild -I ${lib.escapeShellArg target.path} ${
+    runShell target {} { inherit allocateTTY; } "nixos-rebuild -I ${lib.escapeShellArg target.path} ${
       lib.concatMapStringsSep " " lib.escapeShellArg args
     }";
 
