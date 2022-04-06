@@ -65,7 +65,7 @@ in
         ${lib.optionalString (buildTarget' != target')
           (populate { inherit backup force source; target = buildTarget'; })}
         ${populate { inherit backup force source; target = target'; }}
-        ${rebuild { inherit allocateTTY; } ([
+        ${rebuild ([
           "switch"
         ] ++ lib.optionals crossDeploy [
           "--no-build-nix"
@@ -74,7 +74,7 @@ in
           "--target-host" "${target'.user}@${target'.host}"
         ] ++ lib.optionals target'.sudo [
           "--use-remote-sudo"
-        ]) buildTarget'}
+        ]) buildTarget' { inherit allocateTTY; }}
       ''
     );
 
